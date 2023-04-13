@@ -37,6 +37,18 @@ def test_loan_discount_factor():
         166.79, rel=1e-3
     )  # approx two decimal places
 
+#Functional Test
+def test_home_page(client):
+    """
+    GIVEN a user visits the home page
+    WHEN the page loads
+    THEN the user sees "Loan Calculator" in the page body
+    """
+    response = client.get("/")
+    assert response.status_code == 200
+    print("\r")
+    print(" -- home page loads functional test")
+    assert b"Loan Calculator" in response.data
 
 def test_loan_payment():
     """
