@@ -70,5 +70,24 @@ jobs:
           path: |
             ./BUILD
 
-  deploy:
-    
+deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: 'production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: python-app
+          path: .
+          
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v2
+        id: deploy-to-webapp
+        with:
+          app-name: 'loan-hw'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_77e1c966cbb54acfb966c2589d3bde7f }}
