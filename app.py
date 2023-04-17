@@ -3,6 +3,20 @@ from flask import render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
+# Handling error 404 and displaying relevant web page
+@app.errorhandler(404)
+def not_found_error(error):
+    return render_template("404.html"), 404
+
+# Define test functions
+# Test 404 error handler
+def test_404_error_handler(client):
+        # Send a request to a non-existent URL
+    response = client.get('/non-existent-url')
+        # Check if the status code is 404
+    assert response.status_code == 404
+        # Check if the response data contains 'Page not found'
+    assert b'Page not found' in response.data
 
 class Loan:
     def __init__(self, loanAmount, numberYears, annualRate):
